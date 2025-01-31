@@ -14,8 +14,8 @@
 import_files <- function(target_folder){
   ## test vars
   # target_folder <- paste0(proj_dir,"/data-raw/Stradbroke-comp-raw/")
-  # list files
-  files <- list.files(target_folder, full.names = T)
+  # list files containing '.xlsx'
+  files <- list.files(target_folder, full.names = T)[grep(".xlsx",list.files(target_folder, full.names = F))]
   # make list of same length as files name quantity
   flist <- vector('list', length(files))
   names <- vector('character',length = length(files))
@@ -48,13 +48,15 @@ import_site_xlsx <- function(file_path){
   # file_path = paste0(proj_dir,"/data-raw/Stradbroke-comp-raw/NativeCompanionLagoon_with ages.xlsx")
   # Init data list to be filled
   data_list <- vector('list',length = 3) %>%
-    'names<-'(c('metadata','pollen_pct','pollen_pct_ages'))
-  # Get metadata
-  data_list$metadata <- read_xlsx(path = file_path, sheet = "Metadata", col_names = F) %>% 'colnames<-'(c('category','value'))
+    'names<-'(c('metadata','data','ages'))
+  # Get metadata, suppress column renaming because it is annoying
+  suppressMessages(
+    data_list$metadata <- read_xlsx(path = file_path, sheet = "Metadata", col_names = F) %>% 'colnames<-'(c('category','value'))
+  )
   # Get pollen percent
-  data_list$pollen_pct <- read_xlsx(path = file_path, sheet = "POLLEN - %", col_names = T) #%>% 'colnames<-'(c('category','value'))
+  data_list$data <- read_xlsx(path = file_path, sheet = "Data", col_names = T) #%>% 'colnames<-'(c('category','value'))
   # Get ages of pollen
-  data_list$pollen_pct_ages <- read_xlsx(path = file_path, sheet = "POLLEN - %_ages", col_names = T) #%>% 'colnames<-'(c('category','value'))
+  data_list$ages <- read_xlsx(path = file_path, sheet = "Age_iterations", col_names = T) #%>% 'colnames<-'(c('category','value'))
   # return
   return(data_list)
 }
