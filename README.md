@@ -6,45 +6,80 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of MCCPT is to …
+The **MCCPT** package conducts Monte-carlo changepoint analysis on
+paleoclimate records. It is an implementation of Rebecca Killick’s
+[changepoint method](https://github.com/rkillick/changepoint/), but
+applied to paleoclimate records whilst accounting for age-model
+uncertainty.
 
-## Installation
+**MCCPT** was developed originally for [Cadd et
+al. (2021)](https://doi.org/10.1017/qua.2021.16). If you use the
+package, please cite this paper.
 
-You can install the development version of MCCPT like so:
+<p align="center">
+<img src="man/figures/Cadd2021_Title.JPG" height="300px" />
+</p>
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
+If you have questions or comments, you can contact the package
+maintainers: - [Haidee Cadd](https://github.com/h-cadd/) \|
+<haidee@uow.edu.au> - [Matt Harris](https://github.com/MRPHarris/) \|
+<m.harris@gns.cri.nz>
 
-## Example
+## Using the package
 
-This is a basic example which shows you how to solve a common problem:
+### Installation
 
-``` r
-# library(MCCPT)
-## basic example code
-```
+Install **MCCPT** with the devtools package:
+`devtools::install_github("h-cadd/MCCPT")`
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+### Using your data
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+Data must be structured in a specific way in order to be used with the
+package. **MCCPT** currently accepts .xlsx files with the following (on
+separate sheets):
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+1.  ‘Metadata’, containing the entries ‘Site code’ (an abbreviation),
+    and ‘Analysed Proxies’. Here is an example from the data included
+    with the package:
 
-You can also embed plots, for example:
+| category                         | value                            |
+|:---------------------------------|:---------------------------------|
+| Site name                        | Native Companion Lagoon          |
+| Site code                        | NCL                              |
+| Record length (cm)               | 388                              |
+| Latitude                         | 27°40’48’’S                      |
+| Longitude                        | 153°24’36’’E                     |
+| m’s abovel sea level             | 20 m a.s.l                       |
+| Current dominant vegetation type | Open eucalypt woodland.          |
+| Geology                          | Sand.                            |
+| Temperature min & max            | mean min = 19ᵒC, mean max = 25ᵒC |
+| Mean annual rainfall             | 1514 mm pa                       |
+| Age of record (sampled, year AD) | 2017                             |
+| Age of record (base, cal yrs BP) | 44000                            |
+| Dating method                    | Radiocarbon (14C)                |
+| Analysed Proxies                 | Pollen                           |
+| “Best” Hydrological proxy        | NA                               |
+| “Best” Temp proxy                | Pollen                           |
+| Hiatus/boundary                  | NA                               |
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+2.  ‘Data’, containing a formatted data frame of the data you are
+    interested in. This must have at least two columns:
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+-   Depth_cm
+-   Any number of other columns containing proxy data (pollen, d18O,
+    etc.). This will be compressed into a principal curve.
+
+3.  ‘Age_iterations’, containing age model iterations of the proxy
+    record at the same interval resolution as the proxy data.
+
+Refer to the example data contained in the package
+(MCCPT/data-raw/Stradbroke-comp-raw/), derived from [Cadd et
+al. (2024))](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
+
+## References
+
+Cadd, H., Petherick, L., Tyler, J., Herbert, A., Cohen, T. J.,
+Sniderman, K., … Harris, M. R. P. (2021). A continental perspective on
+the timing of environmental change during the last glacial stage in
+Australia. Quaternary Research, 102, 5–23.
+[doi:10.1017/qua.2021.16](https://doi.org/10.1017/qua.2021.16)

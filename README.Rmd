@@ -16,39 +16,53 @@ knitr::opts_chunk$set(
 # MCCPT
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-The goal of MCCPT is to ...
+The **MCCPT** package conducts Monte-carlo changepoint analysis on paleoclimate records. It is an implementation of Rebecca Killick's [changepoint method](https://github.com/rkillick/changepoint/), but applied to paleoclimate records whilst accounting for age-model uncertainty.
 
-## Installation
+**MCCPT** was developed originally for [Cadd et al. (2021)](https://doi.org/10.1017/qua.2021.16). If you use the package, please cite this paper. 
 
-You can install the development version of MCCPT like so:
+<p align="center">
+  <img src="man/figures/Cadd2021_Title.JPG" height="300px" />
+</p>
 
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+If you have questions or comments, you can contact the package maintainers:
+- [Haidee Cadd](https://github.com/h-cadd/) | haidee@uow.edu.au
+- [Matt Harris](https://github.com/MRPHarris/) | m.harris@gns.cri.nz
+
+## Using the package
+
+### Installation
+
+Install **MCCPT** with the devtools package: `devtools::install_github("h-cadd/MCCPT")`
+
+### Using your data
+
+Data must be structured in a specific way in order to be used with the package. **MCCPT** currently accepts .xlsx files with the following (on separate sheets):
+
+1. 'Metadata', containing the entries 'Site code' (an abbreviation), and 'Analysed Proxies'. Here is an example from the data included with the package:
+```{r, echo = FALSE, eval = TRUE, collapse = FALSE, warning = FALSE, message = FALSE}
+pacman::p_load(readxl, magrittr)
+suppressMessages(
+  NCL_metadata <- readxl::read_xlsx(
+    path = "data-raw/Stradbroke-comp-raw/NativeCompanionLagoon_with ages.xlsx", 
+    sheet = "Metadata", col_names = F)  %>% 
+    'colnames<-'(c('category','value'))
+  )
+knitr::kable(NCL_metadata)
 ```
 
-## Example
+2. 'Data', containing a formatted data frame of the data you are interested in. This must have at least two columns:
 
-This is a basic example which shows you how to solve a common problem:
+- Depth_cm
+- Any number of other columns containing proxy data (pollen, d18O, etc.). This will be compressed into a principal curve.
 
-```{r example}
-# library(MCCPT)
-## basic example code
-```
+3. 'Age_iterations', containing age model iterations of the proxy record at the same interval resolution as the proxy data.
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+Refer to the example data contained in the package (MCCPT/data-raw/Stradbroke-comp-raw/), derived from [Cadd et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
 
-```{r cars}
-summary(cars)
-```
+## References
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+Cadd, H., Petherick, L., Tyler, J., Herbert, A., Cohen, T. J., Sniderman, K., … Harris, M. R. P. (2021). A continental perspective on the timing of environmental change during the last glacial stage in Australia. Quaternary Research, 102, 5–23. [doi:10.1017/qua.2021.16](https://doi.org/10.1017/qua.2021.16)
 
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
