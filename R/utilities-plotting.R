@@ -2,7 +2,7 @@
 
 #' Plot changepoints over an existing uncertainties plot
 #'
-#' @description
+#' @description plot changepoints on a proxy record.
 #'
 #' @param cpt.plot changepoint result to plot; output from changepoint::cpt.meanvar
 #' @param time time increments from previous PrC analysis
