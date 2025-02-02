@@ -66,10 +66,9 @@ separate sheets):
 
 2.  ‘Data’, containing a formatted data frame of the data you are
     interested in. This must have at least two columns:
-
-- Depth_cm
-- Any number of other columns containing proxy data (pollen species,
-  d18O, etc.). This will be compressed into a principal curve.
+-   Depth_cm
+-   Any number of other columns containing proxy data (pollen species, d18O,
+    etc.). This will be compressed into a principal curve.
 
 3.  ‘Age_iterations’, containing age model iterations of the proxy
     record at the same interval resolution as the proxy data.
