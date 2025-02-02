@@ -11,6 +11,7 @@
 #' @importFrom stats weighted.mean
 #' @importFrom stats density
 #' @importFrom magrittr %>%
+#' @importFrom changepoint cpts
 #'
 #' @noRd
 #'
