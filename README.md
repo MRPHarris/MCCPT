@@ -21,9 +21,10 @@ package, please cite this paper.
 </p>
 
 If you have questions or comments, you can contact the package
-maintainers: - [Haidee Cadd](https://github.com/h-cadd/) \|
-<haidee@uow.edu.au> - [Matt Harris](https://github.com/MRPHarris/) \|
-<m.harris@gns.cri.nz>
+maintainers:
+
+- [Haidee Cadd](https://github.com/h-cadd/) \| <haidee@uow.edu.au>
+- [Matt Harris](https://github.com/MRPHarris/) \| <m.harris@gns.cri.nz>
 
 ## Using the package
 
@@ -39,8 +40,8 @@ package. **MCCPT** currently accepts .xlsx files with the following (on
 separate sheets):
 
 1.  ‘Metadata’, containing the entries ‘Site code’ (an abbreviation),
-    and ‘Analysed Proxies’. Here is an example from the data included
-    with the package:
+    and ‘Data type’ (i.e., Compositional or Single). Here is an example
+    from the data included with the package:
 
 | category                         | value                            |
 |:---------------------------------|:---------------------------------|
@@ -61,10 +62,10 @@ separate sheets):
 | “Best” Hydrological proxy        | NA                               |
 | “Best” Temp proxy                | Pollen                           |
 | Hiatus/boundary                  | NA                               |
+| Data type                        | Compositional                    |
 
 2.  ‘Data’, containing a formatted data frame of the data you are
     interested in. This must have at least two columns:
-
 -   Depth_cm
 -   Any number of other columns containing proxy data (pollen species, d18O,
     etc.). This will be compressed into a principal curve.
@@ -74,7 +75,19 @@ separate sheets):
 
 Refer to the example data contained in the package
 (MCCPT/data-raw/Stradbroke-comp-raw/), derived from [Cadd et
-al. (2024))](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
+al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
+
+### Running MCCPT
+
+Once you have installed the package and formatted your data
+appropriately, run `conduct_MCCPT()`. This will generate:
+
+- an R list of per-record changepoints, depending on your choices made
+  whilst the program is running.
+- an excel spreadsheet for each record, containing sheets corresponding
+  to data for each changepoint.
+- plots of each record, the position of changepoints, and their
+  distribution within age model iterations.
 
 ## References
 
