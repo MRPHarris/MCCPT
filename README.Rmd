@@ -63,6 +63,14 @@ knitr::kable(NCL_metadata)
 
 Refer to the example data contained in the package (MCCPT/data-raw/Stradbroke-comp-raw/), derived from [Cadd et al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
 
+### Running MCCPT
+
+Once you have installed the package and formatted your data appropriately, run `conduct_MCCPT()`. This will generate:
+
+- an R list of per-record changepoints, depending on your choices made whilst the program is running.
+- an excel spreadsheet for each record, containing sheets corresponding to data for each changepoint.
+- plots of each record, the position of changepoints, and their distribution within age model iterations.
+
 ## References
 
 Cadd, H., Petherick, L., Tyler, J., Herbert, A., Cohen, T. J., Sniderman, K., … Harris, M. R. P. (2021). A continental perspective on the timing of environmental change during the last glacial stage in Australia. Quaternary Research, 102, 5–23. [doi:10.1017/qua.2021.16](https://doi.org/10.1017/qua.2021.16)
