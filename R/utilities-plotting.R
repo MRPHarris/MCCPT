@@ -68,6 +68,8 @@ CPTwindow <- function(cpt.plot,
 #' @param time time increments from previous PrC analysis
 #' @param timescale timescale to use. One of either "BP" or "BCAD".
 #'
+#' @importFrom changepoint param.est
+#'
 #' @noRd
 #'
 plot.cpts<- function(cpt.plot, time, timescale = "BCAD"){
