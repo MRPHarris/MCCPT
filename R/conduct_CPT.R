@@ -117,6 +117,8 @@ conduct_MCCPT <- function(sites_data,
     }
     cpt.plot <- run_cpts(site_data = sites_data[[i]],
                          site_name = names(sites_data)[i],
+                         age_lowerbound = age_lowerbound,
+                         age_upperbound = age_upperbound,
                          minseg_len = NULL,
                          n_cpts = NULL,
                          PrC_results = PrC_results,
@@ -208,6 +210,8 @@ conduct_MCCPT <- function(sites_data,
 #'
 #' @param site_data data from one site, a subset of a list returned by import_data()
 #' @param site_name the name of the current site.
+#' @param age_lowerbound lower age bound
+#' @param age_upperbound upper age bound
 #' @param minseg_len NULL or a numeric value for minimum number of segments
 #' @param n_cpts NULL or a numeric value for the number of changepoints
 #' @param PrC_results results from generate_PrC()
@@ -218,6 +222,8 @@ conduct_MCCPT <- function(sites_data,
 #'
 run_cpts <- function(site_data = sites_data[[i]],
                      site_name = names(sites_data)[i],
+                     age_lowerbound = age_upperbound,
+                     age_upperbound = age_upperbound,
                      minseg_len = NULL,
                      n_cpts = NULL,
                      PrC_results = PrC_results,
