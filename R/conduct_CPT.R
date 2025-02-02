@@ -212,6 +212,8 @@ conduct_MCCPT <- function(sites_data,
 #' @param n_cpts NULL or a numeric value for the number of changepoints
 #' @param PrC_results results from generate_PrC()
 #'
+#' @importFrom changepoint cpt.meanvar
+#'
 #' @noRd
 #'
 run_cpts <- function(site_data = sites_data[[i]],
@@ -308,6 +310,12 @@ run_cpts <- function(site_data = sites_data[[i]],
 #' @param age_upper upperbound of age
 #' @param age_lower lowerbound of age
 #'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr select
+#' @importFrom dplyr mutate
+#' @importFrom dplyr relocate
+#' @importFrom analogue prcurve
+#'
 #' @noRd
 #'
 generate_PrC <- function(site_data,
@@ -362,7 +370,7 @@ generate_PrC <- function(site_data,
     pollen_i <- dat_i %>%
       select(-c(age))
     # Run a prcurve on the pollen data
-    pollen_pc_i <- analogue::prcurve(
+    pollen_pc_i <- prcurve(
       pollen_i,
       method = 'pca',
       trace = TRUE,

@@ -10,6 +10,7 @@
 #'
 #' @importFrom stats weighted.mean
 #' @importFrom stats density
+#' @importFrom magrittr %>%
 #'
 #' @noRd
 #'
@@ -113,6 +114,11 @@ plot.cpts<- function(cpt.plot, time, timescale = "BCAD"){
 #' @param res resolution of sample sequence
 #' @param spline TRUE/FALSE to plot spline
 #'
+#' @importFrom stats predict
+#' @importFrom stats quantile
+#' @importFrom stats approx
+#' @importFrom stats smooth.spline
+#'
 #' @noRd
 #'
 plotUncert<-function(chron, datV, xmin, xmax, res, spline=FALSE){
@@ -124,7 +130,8 @@ plotUncert<-function(chron, datV, xmin, xmax, res, spline=FALSE){
   Z <- seq(xmin, xmax, res)
   aprofun <- function(x) approx(x, datV, Z)$y
   if(spline){
-    aprofun <- function(x) predict(smooth.spline(x, datV), Z)$y}
+    aprofun <- function(x) predict(smooth.spline(x, datV), Z)$y
+  }
   quantfun <- function(x) c(quantile(x, na.rm=TRUE, probs = c(0.05, 0.32, 0.5, 0.68, 0.95)), median(x, na.rm=TRUE), mean(x, na.rm=TRUE), sd(x, na.rm=TRUE))
   apro <- apply(chron, 2, aprofun)
   quants <- data.frame(t(apply(apro, 1, quantfun)))

@@ -21,7 +21,6 @@ import_files <- function(target_folder){
   names <- vector('character',length = length(files))
   # Import, add to list, and get names of each site.
   for(f in seq_along(flist)){
-    # f = 2
     flist[[f]] <- import_site_xlsx(files[f])
     names[f] <- flist[[f]]$metadata[2,2]
   }
