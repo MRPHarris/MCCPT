@@ -321,6 +321,7 @@ run_cpts <- function(site_data = sites_data[[i]],
 #' @importFrom dplyr mutate
 #' @importFrom dplyr relocate
 #' @importFrom analogue prcurve
+#' @importFrom vegan scores
 #'
 #' @noRd
 #'

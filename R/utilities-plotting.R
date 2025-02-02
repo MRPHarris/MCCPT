@@ -11,6 +11,7 @@
 #' @importFrom stats weighted.mean
 #' @importFrom stats density
 #' @importFrom magrittr %>%
+#' @importFrom changepoint cpts
 #'
 #' @noRd
 #'
@@ -66,6 +67,8 @@ CPTwindow <- function(cpt.plot,
 #' @param cpt.plot changepoint result to plot; output from changepoint::cpt.meanvar
 #' @param time time increments from previous PrC analysis
 #' @param timescale timescale to use. One of either "BP" or "BCAD".
+#'
+#' @importFrom changepoint param.est
 #'
 #' @noRd
 #'

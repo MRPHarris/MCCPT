@@ -36,7 +36,7 @@ If you have questions or comments, you can contact the package maintainers:
 
 ### Installation
 
-Install **MCCPT** with the devtools package: `devtools::install_github("h-cadd/MCCPT")`
+Install **MCCPT** with the devtools package: `devtools::install_github("h-cadd/MCCPT", build = FALSE)`
 
 ### Using your data
 
