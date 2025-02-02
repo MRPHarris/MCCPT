@@ -28,6 +28,7 @@ The **MCCPT** package conducts Monte-carlo changepoint analysis on paleoclimate 
 </p>
 
 If you have questions or comments, you can contact the package maintainers:
+
 - [Haidee Cadd](https://github.com/h-cadd/) | haidee@uow.edu.au
 - [Matt Harris](https://github.com/MRPHarris/) | m.harris@gns.cri.nz
 
@@ -41,7 +42,7 @@ Install **MCCPT** with the devtools package: `devtools::install_github("h-cadd/M
 
 Data must be structured in a specific way in order to be used with the package. **MCCPT** currently accepts .xlsx files with the following (on separate sheets):
 
-1. 'Metadata', containing the entries 'Site code' (an abbreviation), and 'Analysed Proxies'. Here is an example from the data included with the package:
+1. 'Metadata', containing the entries 'Site code' (an abbreviation), and 'Data type' (i.e., Compositional or Single). Here is an example from the data included with the package:
 ```{r, echo = FALSE, eval = TRUE, collapse = FALSE, warning = FALSE, message = FALSE}
 pacman::p_load(readxl, magrittr)
 suppressMessages(

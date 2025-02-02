@@ -34,11 +34,11 @@ import_files <- function(target_folder){
 #' Import a of single site xlsx file for changepoint analysis
 #'
 #' @description
-#' Use readxl to import a single spreadsheet's data for an individual site - metadata, data and data ages.
+#' Use openxlsx to import a single spreadsheet's data for an individual site - metadata, data and data ages.
 #'
 #' @param file_path a full path to the site xlsx spreadsheet to be imported
 #'
-#' @importFrom readxl read_xlsx
+#' @importFrom openxlsx read.xlsx
 #' @importFrom magrittr %>%
 #'
 #' @noRd
@@ -51,12 +51,12 @@ import_site_xlsx <- function(file_path){
     'names<-'(c('metadata','data','ages'))
   # Get metadata, suppress column renaming because it is annoying
   suppressMessages(
-    data_list$metadata <- read_xlsx(path = file_path, sheet = "Metadata", col_names = F) %>% 'colnames<-'(c('category','value'))
+    data_list$metadata <- read.xlsx(xlsxFile = file_path, sheet = "Metadata", colNames = F) %>% 'colnames<-'(c('category','value'))
   )
   # Get pollen percent
-  data_list$data <- read_xlsx(path = file_path, sheet = "Data", col_names = T) #%>% 'colnames<-'(c('category','value'))
+  data_list$data <- read.xlsx(xlsxFile = file_path, sheet = "Data", colNames = T) #%>% 'colnames<-'(c('category','value'))
   # Get ages of pollen
-  data_list$ages <- read_xlsx(path = file_path, sheet = "Age_iterations", col_names = T) #%>% 'colnames<-'(c('category','value'))
+  data_list$ages <- read.xlsx(xlsxFile = file_path, sheet = "Age_iterations", colNames = T) #%>% 'colnames<-'(c('category','value'))
   # return
   return(data_list)
 }
