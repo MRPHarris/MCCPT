@@ -12,14 +12,6 @@ paleoclimate records. It is an implementation of Rebecca Killick’s
 applied to paleoclimate records whilst accounting for age-model
 uncertainty.
 
-**MCCPT** was developed originally for [Cadd et
-al. (2021)](https://doi.org/10.1017/qua.2021.16). If you use the
-package, please cite this paper.
-
-<p align="center">
-<img src="man/figures/Cadd2021_Title.JPG" height="300px" />
-</p>
-
 If you have questions or comments, you can contact the package
 maintainers:
 
@@ -90,10 +82,34 @@ appropriately, run `conduct_MCCPT()`. This will generate:
 - plots of each record, the position of changepoints, and their
   distribution within age model iterations.
 
+### Attribution
+
+**MCCPT** was developed originally for [Cadd et
+al. (2021)](https://doi.org/10.1017/qua.2021.16).
+
+<p align="center">
+<img src="man/figures/Cadd2021_Title.JPG" height="300px" />
+</p>
+
+If you use the **MCCPT** package, please cite this paper. As **MCCPT**
+relies heavily on the `changepoint` package, you should also cite
+[Killick & Eckley.
+(2021)](https://www.jstatsoft.org/article/view/v058i03).
+
+An example citation might read something like: *… to identify shifts in
+our records, we conducted a changepoint analysis (Killick & Eckley,
+2014). We used the MCCPT R package, which applies a monte-carlo approach
+to account for age uncertainty in the position of changepoints within
+paleoclimate records (Cadd et al., 2021).*
+
 ## References
 
 Cadd, H., Petherick, L., Tyler, J., Herbert, A., Cohen, T. J.,
 Sniderman, K., … Harris, M. R. P. (2021). A continental perspective on
 the timing of environmental change during the last glacial stage in
-Australia. Quaternary Research, 102, 5–23.
+Australia. *Quaternary Research*, 102, 5–23.
 [doi:10.1017/qua.2021.16](https://doi.org/10.1017/qua.2021.16)
+
+Killick, R. & Eckley, I. A. (2014). changepoint: An R Package for
+Changepoint Analysis. *Journal of Statistical Software*, 58 (3), 1-19.
+[doi:10.18637/jss.v058.i03](https://doi.org/10.18637/jss.v058.i03)
