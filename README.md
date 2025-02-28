@@ -59,7 +59,8 @@ separate sheets):
 2.  ‘Data’, containing a formatted data frame of the data you are
     interested in. This must have at least two columns:
 
-- Depth_cm
+- Depth (exact column name may vary but it must contain the
+  case-sensitive string ‘Depth’)
 - Any number of other columns containing proxy data (pollen species,
   d18O, etc.). This will be compressed into a principal curve.
 

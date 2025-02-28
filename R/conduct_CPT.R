@@ -339,7 +339,8 @@ generate_PrC <- function(site_data,
   # See e.g. data for format.
   bestage_i <- site_data$ages$Mean
   ages_i <- site_data$ages %>%
-    select(-c(Depth_cm,Median))
+    select(-c(Median)) %>%
+    select(-c(which(grepl('Depth', colnames(.)))))
   ## Per-iteration age handling
   if(is.null(age_lowerbound) & is.null(age_upperbound)){
     message("Set age bounds for site ",i,"/",nrow(sites_df)," named ",sites_df[i,1])#,
