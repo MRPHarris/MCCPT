@@ -18,7 +18,7 @@ conduct_MCCPT(
 )
 }
 \arguments{
-\item{sites_data}{formatted paleoclimate data, output from import_sites.}
+\item{sites_data}{formatted paleoclimate data, output from import_files.}
 
 \item{age_lowerbound}{minimum age for the analysis in years BP.}
 

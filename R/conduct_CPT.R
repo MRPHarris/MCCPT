@@ -5,7 +5,7 @@
 #'
 #' @description Apply MCCPT to paleoclimate data
 #'
-#' @param sites_data formatted paleoclimate data, output from import_sites.
+#' @param sites_data formatted paleoclimate data, output from import_files.
 #' @param age_lowerbound minimum age for the analysis in years BP.
 #' @param age_upperbound maximum age for the analysis in years BP.
 #' @param output_folder full file path to a folder where the outputs will be save.
