@@ -14,7 +14,8 @@ conduct_MCCPT(
   save = TRUE,
   rtn = TRUE,
   rev_y = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  uncertainty_res = 20
 )
 }
 \arguments{
@@ -35,6 +36,8 @@ conduct_MCCPT(
 \item{rtn}{TRUE/FALSE to return changepoint data.}
 
 \item{rev_y}{TRUE/FALSE to reverse y axis on plots}
+
+\item{uncertainty_res}{Resolution in years for uncertainty resolution within the PrC calculation. Adjust this for shorter series.}
 }
 \description{
 Apply MCCPT to paleoclimate data

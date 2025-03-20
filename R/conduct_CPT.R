@@ -14,6 +14,7 @@
 #' @param save TRUE/FALSE to save outputs to the output_folder.
 #' @param rtn TRUE/FALSE to return changepoint data.
 #' @param rev_y TRUE/FALSE to reverse y axis on plots
+#' @param uncertainty_res Resolution in years for uncertainty resolution within the PrC calculation. Adjust this for shorter series.
 #'
 #' @importFrom openxlsx addWorksheet
 #' @importFrom openxlsx saveWorkbook
@@ -31,13 +32,14 @@ conduct_MCCPT <- function(sites_data,
                           save = TRUE,
                           rtn = TRUE,
                           rev_y = FALSE,
-                          verbose = TRUE){
+                          verbose = TRUE,
+                          uncertainty_res = 20){
   ## Test vars
-  # sites_data = data_dir
-  # age_lowerbound = 6000
-  # age_upperbound = 22000
+  # sites_data = turtle_cpt_fmt
+  # age_lowerbound = 0
+  # age_upperbound = 20
   # # C:\Users\matth\Desktop\Work\software-and-coding
-  # output_folder = "C:/Users/matth/Desktop/Work/software-and-coding/MCCPT_outputs/"
+  # output_folder = paste0(proj_dir,"MCCPT-test-out/")
   # minseg_len = NULL
   # n_cpts = NULL
   # verbose = TRUE
@@ -77,8 +79,10 @@ conduct_MCCPT <- function(sites_data,
       message("Running CPT analysis for site ",i,"/",nrow(sites_data)," named ",names(sites_data)[i])
     }
     # Message
-    if(verbose){
+    if(verbose & sites_data[[i]]$metadata[which(sites_data[[i]]$metadata[,1] == "Data type"),2] == "Compositional"){
       message("Generating principal curve scores for compositional data types.")
+    } else if(verbose & sites_data[[i]]$metadata[which(sites_data[[i]]$metadata[,1] == "Data type"),2] == "Single"){
+      message("Analysing as single-series data type.")
     }
     # Run PrC
     PrC_results <- generate_PrC(site_data = sites_data[[i]],
@@ -100,7 +104,7 @@ conduct_MCCPT <- function(sites_data,
     plot(time_i, dat_i, type="n", ylab="", xlab="", xlim=c(age_lowerbound, age_upperbound), ylim=(range(dat_i)), cex.axis=1.2)
     box(lwd=2)
     # Uncertainty
-    plotUncert(chron = ageits_i, datV = dat_i, xmin=min(ageits_i), xmax=max(ageits_i), res=20, spline=FALSE)
+    plotUncert(chron = ageits_i, datV = dat_i, xmin = min(ageits_i), xmax = max(ageits_i), res = uncertainty_res, spline=FALSE)
     lines(time_i, dat_i, col = rgb(0,0,0, alpha=0.5), lwd=1.5)
     points(time_i, dat_i, pch=".", cex=3.5, col="black")
     # Text
