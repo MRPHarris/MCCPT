@@ -11,6 +11,7 @@ conduct_MCCPT(
   output_folder = paste0(getwd(), "/CPT_outputs/"),
   minseg_len = NULL,
   n_cpts = NULL,
+  cpt_calc = "meanvar",
   save = TRUE,
   rtn = TRUE,
   rev_y = FALSE,
@@ -30,6 +31,8 @@ conduct_MCCPT(
 \item{minseg_len}{NULL or specify a minimum segment length. User will be prompted for each record if none is specified.}
 
 \item{n_cpts}{number of changepoints to attempt. User will be prompted on a per-record basis if none is specified.}
+
+\item{cpt_calc}{which type of changepoint calculation? One of "meanvar" or "mean".}
 
 \item{save}{TRUE/FALSE to save outputs to the output_folder.}
 

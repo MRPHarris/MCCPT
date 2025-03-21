@@ -11,6 +11,7 @@
 #' @param output_folder full file path to a folder where the outputs will be save.
 #' @param minseg_len NULL or specify a minimum segment length. User will be prompted for each record if none is specified.
 #' @param n_cpts number of changepoints to attempt. User will be prompted on a per-record basis if none is specified.
+#' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
 #' @param save TRUE/FALSE to save outputs to the output_folder.
 #' @param rtn TRUE/FALSE to return changepoint data.
 #' @param rev_y TRUE/FALSE to reverse y axis on plots
@@ -29,6 +30,7 @@ conduct_MCCPT <- function(sites_data,
                           output_folder = paste0(getwd(),"/CPT_outputs/"),
                           minseg_len = NULL,
                           n_cpts = NULL,
+                          cpt_calc = "meanvar",
                           save = TRUE,
                           rtn = TRUE,
                           rev_y = FALSE,
@@ -125,6 +127,7 @@ conduct_MCCPT <- function(sites_data,
                          age_upperbound = age_upperbound,
                          minseg_len = NULL,
                          n_cpts = NULL,
+                         cpt_calc = cpt_calc,
                          PrC_results = PrC_results,
                          status_df = model_status_df)
 
@@ -218,6 +221,7 @@ conduct_MCCPT <- function(sites_data,
 #' @param age_upperbound upper age bound
 #' @param minseg_len NULL or a numeric value for minimum number of segments
 #' @param n_cpts NULL or a numeric value for the number of changepoints
+#' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
 #' @param PrC_results results from generate_PrC()
 #'
 #' @importFrom changepoint cpt.meanvar
@@ -230,6 +234,7 @@ run_cpts <- function(site_data = sites_data[[i]],
                      age_upperbound = age_upperbound,
                      minseg_len = NULL,
                      n_cpts = NULL,
+                     cpt_calc = cpt_calc,
                      PrC_results = PrC_results,
                      status_df = model_status_df){
   # # Vars
@@ -276,11 +281,19 @@ run_cpts <- function(site_data = sites_data[[i]],
     # and the user is prompted to try a different minseg and Q.
     skip_to_next <- FALSE
     # Attempt model, output error to a function (no real idea why R does this)
-    test <- tryCatch(cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                                 minseglen = k, Q=q, method="BinSeg", class = TRUE),
-                     error = function(e) {
-                       skip_to_next <<- TRUE
-                     })
+    if(cpt_calc == "meanvar"){
+      test <- tryCatch(cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
+                                   minseglen = k, Q=q, method="BinSeg", class = TRUE),
+                       error = function(e) {
+                         skip_to_next <<- TRUE
+                       })
+    } else if (cpt_calc == "mean"){
+      test <- tryCatch(cpt.mean(dat_i, penalty = "Manual",pen.value="2*log(n)",
+                                   minseglen = k, Q=q, method="BinSeg", class = TRUE),
+                       error = function(e) {
+                         skip_to_next <<- TRUE
+                       })
+    }
     # if skip to next is true, skip iteration.
     if(skip_to_next) {
       message("\n","Models failed due to minseglen error. Skipping iteration.","\n","------")
