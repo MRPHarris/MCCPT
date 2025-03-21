@@ -228,10 +228,10 @@ conduct_MCCPT <- function(sites_data,
 #'
 #' @noRd
 #'
-run_cpts <- function(site_data = sites_data[[i]],
-                     site_name = names(sites_data)[i],
-                     age_lowerbound = age_upperbound,
-                     age_upperbound = age_upperbound,
+run_cpts <- function(site_data,
+                     site_name,
+                     age_lowerbound,
+                     age_upperbound,
                      minseg_len = NULL,
                      n_cpts = NULL,
                      cpt_calc = cpt_calc,
