@@ -37,11 +37,11 @@ conduct_MCCPT <- function(sites_data,
                           verbose = TRUE,
                           uncertainty_res = 20){
   ## Test vars
-  # sites_data = turtle_cpt_fmt
-  # age_lowerbound = 0
-  # age_upperbound = 20
+  # sites_data = cpt_data
+  # age_lowerbound = 6000
+  # age_upperbound = 22000
   # # C:\Users\matth\Desktop\Work\software-and-coding
-  # output_folder = paste0(proj_dir,"MCCPT-test-out/")
+  # output_folder = data_out_test
   # minseg_len = NULL
   # n_cpts = NULL
   # verbose = TRUE
@@ -300,13 +300,13 @@ run_cpts <- function(site_data,
       model_status_df[i,2] = "FAIL"
       model_status_df[i,3] = "minseglenth error"
       midY <- median(c(min(dat_i), max(dat_i)))
-      lines(c(age_lowerbound_i, age_upperbound_i), c(midY,midY), col="blue", lwd=2)
+      lines(c(age_lowerbound, age_upperbound), c(midY,midY), col="blue", lwd=2)
       mtext(paste0(site_name), side=3, adj=0, cex=1.3, line=0.2)
       mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
       box(lwd=2)
       # dev.copy(pdf,paste0(output_folder,site_name"_CPT.pdf"),  width=10, height=6)
       # if (length(dev.list()!=0)) {dev.off()}
-      message("completed site ",i,"/",nrow(sites_df),"\n","-------")
+      # message("completed site ",i,"/",nrow(sites_df),"\n","-------")
       next
     } else {
       bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
