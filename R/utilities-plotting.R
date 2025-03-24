@@ -121,7 +121,8 @@ plot_cpt_pre <- function(PrC_results,
                          age_upperbound,
                          age_lowerbound,
                          rev_y,
-                         uncertainty_res){
+                         uncertainty_res,
+                         verbose = verbose){
   # Get PrC results
   # PrC_results <- generate_PrC(site_data = site_data,
   #                             age_upper = age_upper,
