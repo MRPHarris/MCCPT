@@ -104,7 +104,8 @@ conduct_MCCPT <- function(sites_data,
                          PrC_results = PrC_results,
                          status_df = model_status_df,
                          rev_y = rev_y,
-                         uncertainty_res = uncertainty_res)
+                         uncertainty_res = uncertainty_res,
+                         verbose = verbose)
 
     if(verbose){
       message("Extracting age model iteration changepoint densities")
@@ -198,6 +199,9 @@ conduct_MCCPT <- function(sites_data,
 #' @param n_cpts NULL or a numeric value for the number of changepoints
 #' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
 #' @param PrC_results results from generate_PrC()
+#' @param rev_y TRUE/FALSE to reverse y axis
+#' @param uncertainty_res resolution of uncertainty in years
+#' @param verbose TRUE/FALSE to print status as fn proceeds
 #'
 #' @importFrom changepoint cpt.meanvar
 #'
@@ -213,7 +217,8 @@ run_cpts <- function(site_data,
                      PrC_results = NULL,
                      status_df = NULL,
                      rev_y = NULL,
-                     uncertainty_res = NULL){
+                     uncertainty_res = NULL,
+                     verbose){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
