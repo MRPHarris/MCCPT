@@ -90,33 +90,6 @@ conduct_MCCPT <- function(sites_data,
     PrC_results <- generate_PrC(site_data = sites_data[[i]],
                                 age_upper = age_upperbound,
                                 age_lower = age_lowerbound)
-    dat_i <- PrC_results$scrs
-    time_i <- PrC_results$time
-    ageits_i <- PrC_results$ageits
-    ## Plot 1: Data (or PrC scores) with age uncertainty
-    # clear plots
-    if (length(dev.list()!=0)) {dev.off()}
-    # Set plot margins
-    par(oma = c(3,0,0,0))
-    par(fig=c(0,0.5,0.2,0.9), mar=c(2,2,2,1))
-    if(verbose){
-      message("Plotting age uncertainty.","\n","------")
-    }
-    # Plot data
-    plot(time_i, dat_i, type="n", ylab="", xlab="", xlim=c(age_lowerbound, age_upperbound), ylim=(range(dat_i)), cex.axis=1.2)
-    box(lwd=2)
-    # Uncertainty
-    plotUncert(chron = ageits_i, datV = dat_i, xmin = min(ageits_i), xmax = max(ageits_i), res = uncertainty_res, spline=FALSE)
-    lines(time_i, dat_i, col = rgb(0,0,0, alpha=0.5), lwd=1.5)
-    points(time_i, dat_i, pch=".", cex=3.5, col="black")
-    # Text
-    mtext(paste0(names(sites_data)[i]), side=3, adj=0, cex=1.3, line=0.2)
-    mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
-    box(lwd=2)
-    # Reverse y axis if chosen
-    if(rev_y){
-      ylim<-rev(range(dat_i))
-    }
     # message
     if(verbose){
       message("Running changepoint model.")
@@ -129,7 +102,9 @@ conduct_MCCPT <- function(sites_data,
                          n_cpts = NULL,
                          cpt_calc = cpt_calc,
                          PrC_results = PrC_results,
-                         status_df = model_status_df)
+                         status_df = model_status_df,
+                         rev_y = rev_y,
+                         uncertainty_res = uncertainty_res)
 
     if(verbose){
       message("Extracting age model iteration changepoint densities")
@@ -236,7 +211,9 @@ run_cpts <- function(site_data,
                      n_cpts = NULL,
                      cpt_calc = "meanvar",
                      PrC_results = NULL,
-                     status_df = NULL){
+                     status_df = NULL,
+                     rev_y = NULL,
+                     uncertainty_res = NULL){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
@@ -254,6 +231,12 @@ run_cpts <- function(site_data,
   # Here k opeates
   likemodel=0 # set k to zero so that you can reset the loop
   while(likemodel<1){
+    # Generate initial plot
+    plot_cpt_pre(PrC_results,
+                 age_upperbound = age_upperbound,
+                 age_lowerbound = age_lowerbound,
+                 rev_y = rev_y,
+                 uncertainty_res = uncertainty_res)
     ## Segment length selection
     if(is.null(minseg_len)){
       message("Set MinSeg length for ",site_name,
@@ -322,6 +305,9 @@ run_cpts <- function(site_data,
       cpt.plot<-bm1_i
       plot.cpts(cpt.plot, time=time_i, timescale = "BP")
       likemodel <- readline("Do you like this model: 0=No, 1=Yes ")
+      if(likemodel == 0){
+
+      }
       #k=1
     }
   }
