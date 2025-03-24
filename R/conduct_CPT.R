@@ -236,7 +236,8 @@ run_cpts <- function(site_data,
                  age_upperbound = age_upperbound,
                  age_lowerbound = age_lowerbound,
                  rev_y = rev_y,
-                 uncertainty_res = uncertainty_res)
+                 uncertainty_res = uncertainty_res,
+                 verbose = verbose)
     ## Segment length selection
     if(is.null(minseg_len)){
       message("Set MinSeg length for ",site_name,
