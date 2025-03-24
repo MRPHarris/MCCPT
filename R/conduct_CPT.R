@@ -234,9 +234,9 @@ run_cpts <- function(site_data,
                      age_upperbound,
                      minseg_len = NULL,
                      n_cpts = NULL,
-                     cpt_calc = cpt_calc,
-                     PrC_results = PrC_results,
-                     status_df = model_status_df){
+                     cpt_calc = "meanvar",
+                     PrC_results = NULL,
+                     status_df = NULL){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
@@ -309,8 +309,15 @@ run_cpts <- function(site_data,
       # message("completed site ",i,"/",nrow(sites_df),"\n","-------")
       next
     } else {
-      bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                           minseglen = k, Q=q, method="BinSeg", class = TRUE )
+      if(cpt_calc == "meanvar"){
+        bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
+                             minseglen = k, Q=q, method="BinSeg", class = TRUE )
+      } else if(cpt_calc == "mean"){
+        bm1_i <- cpt.mean(dat_i, penalty = "Manual",pen.value="2*log(n)",
+                             minseglen = k, Q=q, method="BinSeg", class = TRUE )
+      }
+      # bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
+      #                      minseglen = k, Q=q, method="BinSeg", class = TRUE )
       ncpts<-as.numeric(nrow(as.data.frame(bm1_i@cpts)))
       cpt.plot<-bm1_i
       plot.cpts(cpt.plot, time=time_i, timescale = "BP")
