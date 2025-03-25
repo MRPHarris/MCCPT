@@ -105,7 +105,8 @@ conduct_MCCPT <- function(sites_data,
                          status_df = model_status_df,
                          rev_y = rev_y,
                          uncertainty_res = uncertainty_res,
-                         verbose = verbose)
+                         verbose = verbose,,
+                         site_name = paste0(names(sites_data)[i]))
 
     if(verbose){
       message("Extracting age model iteration changepoint densities")
@@ -218,7 +219,8 @@ run_cpts <- function(site_data,
                      status_df = NULL,
                      rev_y = NULL,
                      uncertainty_res = NULL,
-                     verbose){
+                     verbose,
+                     site_name){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
@@ -242,7 +244,8 @@ run_cpts <- function(site_data,
                  age_lowerbound = age_lowerbound,
                  rev_y = rev_y,
                  uncertainty_res = uncertainty_res,
-                 verbose = verbose)
+                 verbose = verbose,
+                 site_name = site_name)
     ## Segment length selection
     if(is.null(minseg_len)){
       message("Set MinSeg length for ",site_name,

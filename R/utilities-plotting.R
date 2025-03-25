@@ -122,7 +122,8 @@ plot_cpt_pre <- function(PrC_results,
                          age_lowerbound,
                          rev_y,
                          uncertainty_res,
-                         verbose){
+                         verbose,
+                         site_name){
   # Get PrC results
   # PrC_results <- generate_PrC(site_data = site_data,
   #                             age_upper = age_upper,
@@ -147,7 +148,7 @@ plot_cpt_pre <- function(PrC_results,
   lines(time_i, dat_i, col = rgb(0,0,0, alpha=0.5), lwd=1.5)
   points(time_i, dat_i, pch=".", cex=3.5, col="black")
   # Text
-  mtext(paste0(names(sites_data)[i]), side=3, adj=0, cex=1.3, line=0.2)
+  mtext(site_name, side=3, adj=0, cex=1.3, line=0.2)
   mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
   box(lwd=2)
   # Reverse y axis if chosen
