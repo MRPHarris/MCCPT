@@ -306,8 +306,8 @@ run_cpts <- function(site_data,
     # if skip to next is true, skip iteration.
     if(skip_to_next) {
       message("\n","Models failed due to minseglen error. Skipping iteration.","\n","------")
-      model_status_df[i,2] = "FAIL"
-      model_status_df[i,3] = "minseglenth error"
+      # model_status_df[i,2] = "FAIL"
+      # model_status_df[i,3] = "minseglenth error"
       midY <- median(c(min(dat_i), max(dat_i)))
       lines(c(age_lowerbound, age_upperbound), c(midY,midY), col="blue", lwd=2)
       mtext(paste0(site_name), side=3, adj=0, cex=1.3, line=0.2)
