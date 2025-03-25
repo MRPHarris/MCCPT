@@ -105,8 +105,7 @@ conduct_MCCPT <- function(sites_data,
                          status_df = model_status_df,
                          rev_y = rev_y,
                          uncertainty_res = uncertainty_res,
-                         verbose = verbose,,
-                         site_name = paste0(names(sites_data)[i]))
+                         verbose = verbose)
 
     if(verbose){
       message("Extracting age model iteration changepoint densities")
