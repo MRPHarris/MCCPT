@@ -291,13 +291,13 @@ run_cpts <- function(site_data,
     skip_to_next <- FALSE
     # Attempt model, output error to a function (no real idea why R does this)
     if(cpt_calc == "meanvar"){
-      test <- tryCatch(cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty,
+      test <- tryCatch(cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty_value,
                                    minseglen = k, Q = q, method = cpt_method, class = TRUE),
                        error = function(e) {
                          skip_to_next <<- TRUE
                        })
     } else if (cpt_calc == "mean"){
-      test <- tryCatch(cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty,
+      test <- tryCatch(cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty_value,
                                    minseglen = k, Q = q, method = cpt_method, class = TRUE),
                        error = function(e) {
                          skip_to_next <<- TRUE
