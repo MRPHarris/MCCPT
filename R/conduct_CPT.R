@@ -12,6 +12,9 @@
 #' @param minseg_len NULL or specify a minimum segment length. User will be prompted for each record if none is specified.
 #' @param n_cpts number of changepoints to attempt. User will be prompted on a per-record basis if none is specified.
 #' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
+#' @param cpt_method passed to method in cpt.mean or cpt.meanvar. See \link[changepoint]{cpt.mean}
+#' @param penalty_value value used for pen.value in cpt.mean or cpt.meanvar.
+#' @param penalty_type character; value passed to penalty in cpt.mean or cpt.meanvar.
 #' @param save TRUE/FALSE to save outputs to the output_folder.
 #' @param rtn TRUE/FALSE to return changepoint data.
 #' @param rev_y TRUE/FALSE to reverse y axis on plots
@@ -31,6 +34,9 @@ conduct_MCCPT <- function(sites_data,
                           minseg_len = NULL,
                           n_cpts = NULL,
                           cpt_calc = "meanvar",
+                          cpt_method = "BinSeg",
+                          penalty_value = "2*log(n)",
+                          penalty_type = "Manual",
                           save = TRUE,
                           rtn = TRUE,
                           rev_y = FALSE,
@@ -105,6 +111,9 @@ conduct_MCCPT <- function(sites_data,
                          minseg_len = NULL,
                          n_cpts = NULL,
                          cpt_calc = cpt_calc,
+                         cpt_method = cpt_method,
+                         penalty_value = penalty_value,
+                         penalty_type = penalty_type,
                          PrC_results = PrC_results,
                          status_df = model_status_df,
                          rev_y = rev_y,
@@ -218,6 +227,9 @@ run_cpts <- function(site_data,
                      minseg_len = NULL,
                      n_cpts = NULL,
                      cpt_calc = "meanvar",
+                     cpt_method = "BinSeg",
+                     penalty_value = "2*log(n)",
+                     penalty_type = "Manual",
                      PrC_results = NULL,
                      status_df = NULL,
                      rev_y = NULL,
@@ -276,14 +288,14 @@ run_cpts <- function(site_data,
     skip_to_next <- FALSE
     # Attempt model, output error to a function (no real idea why R does this)
     if(cpt_calc == "meanvar"){
-      test <- tryCatch(cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                                   minseglen = k, Q=q, method="BinSeg", class = TRUE),
+      test <- tryCatch(cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty,
+                                   minseglen = k, Q = q, method = cpt_method, class = TRUE),
                        error = function(e) {
                          skip_to_next <<- TRUE
                        })
     } else if (cpt_calc == "mean"){
-      test <- tryCatch(cpt.mean(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                                   minseglen = k, Q=q, method="BinSeg", class = TRUE),
+      test <- tryCatch(cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty,
+                                   minseglen = k, Q = q, method = cpt_method, class = TRUE),
                        error = function(e) {
                          skip_to_next <<- TRUE
                        })
@@ -304,11 +316,11 @@ run_cpts <- function(site_data,
       next
     } else {
       if(cpt_calc == "meanvar"){
-        bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                             minseglen = k, Q=q, method="BinSeg", class = TRUE )
+        bm1_i <- cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                             minseglen = k, Q = q, method = cpt_method, class = TRUE )
       } else if(cpt_calc == "mean"){
-        bm1_i <- cpt.mean(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                             minseglen = k, Q=q, method="BinSeg", class = TRUE )
+        bm1_i <- cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                             minseglen = k, Q = q, method = cpt_method, class = TRUE )
       }
       # bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
       #                      minseglen = k, Q=q, method="BinSeg", class = TRUE )
