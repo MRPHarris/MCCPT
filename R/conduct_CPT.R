@@ -219,8 +219,7 @@ run_cpts <- function(site_data,
                      status_df = NULL,
                      rev_y = NULL,
                      uncertainty_res = NULL,
-                     verbose,
-                     site_name = NULL){
+                     verbose){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
