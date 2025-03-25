@@ -211,6 +211,9 @@ conduct_MCCPT <- function(sites_data,
 #' @param minseg_len NULL or a numeric value for minimum number of segments
 #' @param n_cpts NULL or a numeric value for the number of changepoints
 #' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
+#' @param cpt_method passed to method in cpt.mean or cpt.meanvar. See \link[changepoint]{cpt.mean}
+#' @param penalty_value value used for pen.value in cpt.mean or cpt.meanvar.
+#' @param penalty_type character; value passed to penalty in cpt.mean or cpt.meanvar.
 #' @param PrC_results results from generate_PrC()
 #' @param rev_y TRUE/FALSE to reverse y axis
 #' @param uncertainty_res resolution of uncertainty in years
