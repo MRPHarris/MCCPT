@@ -92,7 +92,7 @@ conduct_MCCPT <- function(sites_data,
                                 age_lower = age_lowerbound)
     dat_i = PrC_results$scrs
     time_i = PrC_results$time
-    model_status_df = status_df
+    # model_status_df = status_df
     # message
     if(verbose){
       message("Running changepoint model.")
