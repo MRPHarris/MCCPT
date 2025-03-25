@@ -220,7 +220,7 @@ run_cpts <- function(site_data,
                      rev_y = NULL,
                      uncertainty_res = NULL,
                      verbose,
-                     site_name){
+                     site_name = NULL){
   # # Vars
   # site_data <- sites_data[[i]]
   # site_name <- names(sites_data)[i]
@@ -245,7 +245,7 @@ run_cpts <- function(site_data,
                  rev_y = rev_y,
                  uncertainty_res = uncertainty_res,
                  verbose = verbose,
-                 site_name = site_name)
+                 name = site_name)
     ## Segment length selection
     if(is.null(minseg_len)){
       message("Set MinSeg length for ",site_name,
