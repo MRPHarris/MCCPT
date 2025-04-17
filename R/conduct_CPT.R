@@ -42,19 +42,8 @@ conduct_MCCPT <- function(sites_data,
                           rev_y = FALSE,
                           verbose = TRUE,
                           uncertainty_res = 20){
-  ## Test vars
-  # sites_data = cpt_data
-  # age_lowerbound = 6000
-  # age_upperbound = 22000
-  # output_folder = data_out_test
-  # minseg_len = NULL
-  # n_cpts = NULL
-  # verbose = TRUE
-  # save = TRUE
-  # rtn = TRUE
-  # rev_y = FALSE
   ## Input handling
-  # For input data. This can be either a list of sites or a directory to get sites from
+  # For input data.
   if(is.list(sites_data)){
     if(verbose){
       message("sites_data detected as list. Format will be assumed as correct, i.e. an output from import_files()")
@@ -237,14 +226,6 @@ run_cpts <- function(site_data,
                      rev_y = NULL,
                      uncertainty_res = NULL,
                      verbose){
-  # # Vars
-  # site_data <- sites_data[[i]]
-  # site_name <- names(sites_data)[i]
-  # minseg_len = NULL
-  # n_cpts = NULL
-  # PrC_results = PrC_results
-  # status_df = model_status_df
-
   # Data passover
   dat_i = PrC_results$scrs
   time_i = PrC_results$time
@@ -363,10 +344,6 @@ run_cpts <- function(site_data,
 generate_PrC <- function(site_data,
                          age_upper = age_upperbound,
                          age_lower = age_lowerbound){
-  ## test vars
-  # site_data = sites_data[[i]]
-  # age_upper = age_lowerbound
-  # age_lower = age_lowerbound
   ## var passover
   age_upperbound = age_upper
   age_lowerbound = age_lower
