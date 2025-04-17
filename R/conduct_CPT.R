@@ -46,7 +46,6 @@ conduct_MCCPT <- function(sites_data,
   # sites_data = cpt_data
   # age_lowerbound = 6000
   # age_upperbound = 22000
-  # # C:\Users\matth\Desktop\Work\software-and-coding
   # output_folder = data_out_test
   # minseg_len = NULL
   # n_cpts = NULL
