@@ -5,15 +5,20 @@
 #'
 #' @description Apply MCCPT to paleoclimate data
 #'
-#' @param sites_data formatted paleoclimate data, output from import_sites.
+#' @param sites_data formatted paleoclimate data, output from import_files.
 #' @param age_lowerbound minimum age for the analysis in years BP.
 #' @param age_upperbound maximum age for the analysis in years BP.
 #' @param output_folder full file path to a folder where the outputs will be save.
 #' @param minseg_len NULL or specify a minimum segment length. User will be prompted for each record if none is specified.
 #' @param n_cpts number of changepoints to attempt. User will be prompted on a per-record basis if none is specified.
+#' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
+#' @param cpt_method passed to method in cpt.mean or cpt.meanvar. See \link[changepoint]{cpt.mean}
+#' @param penalty_value value used for pen.value in cpt.mean or cpt.meanvar.
+#' @param penalty_type character; value passed to penalty in cpt.mean or cpt.meanvar.
 #' @param save TRUE/FALSE to save outputs to the output_folder.
 #' @param rtn TRUE/FALSE to return changepoint data.
 #' @param rev_y TRUE/FALSE to reverse y axis on plots
+#' @param uncertainty_res Resolution in years for uncertainty resolution within the PrC calculation. Adjust this for shorter series.
 #'
 #' @importFrom openxlsx addWorksheet
 #' @importFrom openxlsx saveWorkbook
@@ -28,24 +33,17 @@ conduct_MCCPT <- function(sites_data,
                           output_folder = paste0(getwd(),"/CPT_outputs/"),
                           minseg_len = NULL,
                           n_cpts = NULL,
+                          cpt_calc = "meanvar",
+                          cpt_method = "BinSeg",
+                          penalty_value = "2*log(n)",
+                          penalty_type = "Manual",
                           save = TRUE,
                           rtn = TRUE,
                           rev_y = FALSE,
-                          verbose = TRUE){
-  ## Test vars
-  # sites_data = data_dir
-  # age_lowerbound = 6000
-  # age_upperbound = 22000
-  # # C:\Users\matth\Desktop\Work\software-and-coding
-  # output_folder = "C:/Users/matth/Desktop/Work/software-and-coding/MCCPT_outputs/"
-  # minseg_len = NULL
-  # n_cpts = NULL
-  # verbose = TRUE
-  # save = TRUE
-  # rtn = TRUE
-  # rev_y = FALSE
+                          verbose = TRUE,
+                          uncertainty_res = 20){
   ## Input handling
-  # For input data. This can be either a list of sites or a directory to get sites from
+  # For input data.
   if(is.list(sites_data)){
     if(verbose){
       message("sites_data detected as list. Format will be assumed as correct, i.e. an output from import_files()")
@@ -77,40 +75,19 @@ conduct_MCCPT <- function(sites_data,
       message("Running CPT analysis for site ",i,"/",nrow(sites_data)," named ",names(sites_data)[i])
     }
     # Message
-    if(verbose){
+    if(verbose & sites_data[[i]]$metadata[which(sites_data[[i]]$metadata[,1] == "Data type"),2] == "Compositional"){
       message("Generating principal curve scores for compositional data types.")
+    } else if(verbose & sites_data[[i]]$metadata[which(sites_data[[i]]$metadata[,1] == "Data type"),2] == "Single"){
+      message("Analysing as single-series data type.")
     }
     # Run PrC
     PrC_results <- generate_PrC(site_data = sites_data[[i]],
                                 age_upper = age_upperbound,
                                 age_lower = age_lowerbound)
-    dat_i <- PrC_results$scrs
-    time_i <- PrC_results$time
+    dat_i = PrC_results$scrs
+    time_i = PrC_results$time
     ageits_i <- PrC_results$ageits
-    ## Plot 1: Data (or PrC scores) with age uncertainty
-    # clear plots
-    if (length(dev.list()!=0)) {dev.off()}
-    # Set plot margins
-    par(oma = c(3,0,0,0))
-    par(fig=c(0,0.5,0.2,0.9), mar=c(2,2,2,1))
-    if(verbose){
-      message("Plotting age uncertainty.","\n","------")
-    }
-    # Plot data
-    plot(time_i, dat_i, type="n", ylab="", xlab="", xlim=c(age_lowerbound, age_upperbound), ylim=(range(dat_i)), cex.axis=1.2)
-    box(lwd=2)
-    # Uncertainty
-    plotUncert(chron = ageits_i, datV = dat_i, xmin=min(ageits_i), xmax=max(ageits_i), res=20, spline=FALSE)
-    lines(time_i, dat_i, col = rgb(0,0,0, alpha=0.5), lwd=1.5)
-    points(time_i, dat_i, pch=".", cex=3.5, col="black")
-    # Text
-    mtext(paste0(names(sites_data)[i]), side=3, adj=0, cex=1.3, line=0.2)
-    mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
-    box(lwd=2)
-    # Reverse y axis if chosen
-    if(rev_y){
-      ylim<-rev(range(dat_i))
-    }
+    # model_status_df = status_df
     # message
     if(verbose){
       message("Running changepoint model.")
@@ -121,8 +98,15 @@ conduct_MCCPT <- function(sites_data,
                          age_upperbound = age_upperbound,
                          minseg_len = NULL,
                          n_cpts = NULL,
+                         cpt_calc = cpt_calc,
+                         cpt_method = cpt_method,
+                         penalty_value = penalty_value,
+                         penalty_type = penalty_type,
                          PrC_results = PrC_results,
-                         status_df = model_status_df)
+                         status_df = model_status_df,
+                         rev_y = rev_y,
+                         uncertainty_res = uncertainty_res,
+                         verbose = verbose)
 
     if(verbose){
       message("Extracting age model iteration changepoint densities")
@@ -214,28 +198,34 @@ conduct_MCCPT <- function(sites_data,
 #' @param age_upperbound upper age bound
 #' @param minseg_len NULL or a numeric value for minimum number of segments
 #' @param n_cpts NULL or a numeric value for the number of changepoints
+#' @param cpt_calc which type of changepoint calculation? One of "meanvar" or "mean".
+#' @param cpt_method passed to method in cpt.mean or cpt.meanvar. See \link[changepoint]{cpt.mean}
+#' @param penalty_value value used for pen.value in cpt.mean or cpt.meanvar.
+#' @param penalty_type character; value passed to penalty in cpt.mean or cpt.meanvar.
 #' @param PrC_results results from generate_PrC()
+#' @param rev_y TRUE/FALSE to reverse y axis
+#' @param uncertainty_res resolution of uncertainty in years
+#' @param verbose TRUE/FALSE to print status as fn proceeds
 #'
 #' @importFrom changepoint cpt.meanvar
 #'
 #' @noRd
 #'
-run_cpts <- function(site_data = sites_data[[i]],
-                     site_name = names(sites_data)[i],
-                     age_lowerbound = age_upperbound,
-                     age_upperbound = age_upperbound,
+run_cpts <- function(site_data,
+                     site_name,
+                     age_lowerbound,
+                     age_upperbound,
                      minseg_len = NULL,
                      n_cpts = NULL,
-                     PrC_results = PrC_results,
-                     status_df = model_status_df){
-  # # Vars
-  # site_data <- sites_data[[i]]
-  # site_name <- names(sites_data)[i]
-  # minseg_len = NULL
-  # n_cpts = NULL
-  # PrC_results = PrC_results
-  # status_df = model_status_df
-
+                     cpt_calc = "meanvar",
+                     cpt_method = "BinSeg",
+                     penalty_value = "2*log(n)",
+                     penalty_type = "Manual",
+                     PrC_results = NULL,
+                     status_df = NULL,
+                     rev_y = NULL,
+                     uncertainty_res = NULL,
+                     verbose){
   # Data passover
   dat_i = PrC_results$scrs
   time_i = PrC_results$time
@@ -245,6 +235,14 @@ run_cpts <- function(site_data = sites_data[[i]],
   # Here k opeates
   likemodel=0 # set k to zero so that you can reset the loop
   while(likemodel<1){
+    # Generate initial plot
+    plot_cpt_pre(PrC_results,
+                 age_upperbound = age_upperbound,
+                 age_lowerbound = age_lowerbound,
+                 rev_y = rev_y,
+                 uncertainty_res = uncertainty_res,
+                 verbose = verbose,
+                 name = site_name)
     ## Segment length selection
     if(is.null(minseg_len)){
       message("Set MinSeg length for ",site_name,
@@ -272,32 +270,50 @@ run_cpts <- function(site_data = sites_data[[i]],
     # and the user is prompted to try a different minseg and Q.
     skip_to_next <- FALSE
     # Attempt model, output error to a function (no real idea why R does this)
-    test <- tryCatch(cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                                 minseglen = k, Q=q, method="BinSeg", class = TRUE),
-                     error = function(e) {
-                       skip_to_next <<- TRUE
-                     })
+    if(cpt_calc == "meanvar"){
+      test <- tryCatch(cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                                   minseglen = k, Q = q, method = cpt_method, class = TRUE),
+                       error = function(e) {
+                         skip_to_next <<- TRUE
+                       })
+    } else if (cpt_calc == "mean"){
+      test <- tryCatch(cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                                   minseglen = k, Q = q, method = cpt_method, class = TRUE),
+                       error = function(e) {
+                         skip_to_next <<- TRUE
+                       })
+    }
     # if skip to next is true, skip iteration.
     if(skip_to_next) {
       message("\n","Models failed due to minseglen error. Skipping iteration.","\n","------")
-      model_status_df[i,2] = "FAIL"
-      model_status_df[i,3] = "minseglenth error"
+      # model_status_df[i,2] = "FAIL"
+      # model_status_df[i,3] = "minseglenth error"
       midY <- median(c(min(dat_i), max(dat_i)))
-      lines(c(age_lowerbound_i, age_upperbound_i), c(midY,midY), col="blue", lwd=2)
+      lines(c(age_lowerbound, age_upperbound), c(midY,midY), col="blue", lwd=2)
       mtext(paste0(site_name), side=3, adj=0, cex=1.3, line=0.2)
       mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
       box(lwd=2)
       # dev.copy(pdf,paste0(output_folder,site_name"_CPT.pdf"),  width=10, height=6)
       # if (length(dev.list()!=0)) {dev.off()}
-      message("completed site ",i,"/",nrow(sites_df),"\n","-------")
+      # message("completed site ",i,"/",nrow(sites_df),"\n","-------")
       next
     } else {
-      bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
-                           minseglen = k, Q=q, method="BinSeg", class = TRUE )
+      if(cpt_calc == "meanvar"){
+        bm1_i <- cpt.meanvar(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                             minseglen = k, Q = q, method = cpt_method, class = TRUE )
+      } else if(cpt_calc == "mean"){
+        bm1_i <- cpt.mean(dat_i, penalty = penalty_type, pen.value = penalty_value,
+                             minseglen = k, Q = q, method = cpt_method, class = TRUE )
+      }
+      # bm1_i <- cpt.meanvar(dat_i, penalty = "Manual",pen.value="2*log(n)",
+      #                      minseglen = k, Q=q, method="BinSeg", class = TRUE )
       ncpts<-as.numeric(nrow(as.data.frame(bm1_i@cpts)))
       cpt.plot<-bm1_i
       plot.cpts(cpt.plot, time=time_i, timescale = "BP")
       likemodel <- readline("Do you like this model: 0=No, 1=Yes ")
+      if(likemodel == 0){
+
+      }
       #k=1
     }
   }
@@ -328,10 +344,6 @@ run_cpts <- function(site_data = sites_data[[i]],
 generate_PrC <- function(site_data,
                          age_upper = age_upperbound,
                          age_lower = age_lowerbound){
-  ## test vars
-  # site_data = sites_data[[i]]
-  # age_upper = age_lowerbound
-  # age_lower = age_lowerbound
   ## var passover
   age_upperbound = age_upper
   age_lowerbound = age_lower
@@ -339,7 +351,8 @@ generate_PrC <- function(site_data,
   # See e.g. data for format.
   bestage_i <- site_data$ages$Mean
   ages_i <- site_data$ages %>%
-    select(-c(Depth_cm,Median))
+    select(-c(Median)) %>%
+    select(-c(which(grepl('Depth', colnames(.)))))
   ## Per-iteration age handling
   if(is.null(age_lowerbound) & is.null(age_upperbound)){
     message("Set age bounds for site ",i,"/",nrow(sites_df)," named ",sites_df[i,1])#,

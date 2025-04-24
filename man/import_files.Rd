@@ -4,9 +4,11 @@
 \alias{import_files}
 \title{Get all sites in the target folder}
 \usage{
-import_files(target_folder)
+import_files(target_folder, verbose = TRUE)
 }
 \arguments{
+\item{verbose}{TRUE/FALSE to print per-file update progress}
+
 \item{folder_path}{a full path to the directory containing site xlsx files}
 }
 \description{

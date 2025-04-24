@@ -105,6 +105,58 @@ plot.cpts<- function(cpt.plot, time, timescale = "BCAD"){
   }
 }
 
+#' Plot record prior to displaying changepoints
+#'
+#' @description plot a record with uncertainty windows across the supplied time period
+#'
+#' @param PrC_results output from generate_PrC
+#' @param age_upper upper age limit in years
+#' @param age_lower lower age limit in years
+#' @param rev_y TRUE/FALSE to reverse y axis
+#' @param uncertainty_res resolution of the uncertainty in years
+#'
+#' @noRd
+#'
+plot_cpt_pre <- function(PrC_results,
+                         age_upperbound,
+                         age_lowerbound,
+                         rev_y,
+                         uncertainty_res,
+                         verbose,
+                         name){
+  # Get PrC results
+  # PrC_results <- generate_PrC(site_data = site_data,
+  #                             age_upper = age_upper,
+  #                             age_lower = age_lower)
+  dat_i <- PrC_results$scrs
+  time_i <- PrC_results$time
+  ageits_i <- PrC_results$ageits
+  ## Plot 1: Data (or PrC scores) with age uncertainty
+  # clear plots
+  if (length(dev.list()!=0)) {dev.off()}
+  # Set plot margins
+  par(oma = c(3,0,0,0))
+  par(fig=c(0,0.5,0.2,0.9), mar=c(2,2,2,1))
+  if(verbose){
+    message("Plotting age uncertainty.","\n","------")
+  }
+  # Plot data
+  plot(time_i, dat_i, type="n", ylab="", xlab="", xlim=c(age_lowerbound, age_upperbound), ylim=(range(dat_i)), cex.axis=1.2)
+  box(lwd=2)
+  # Uncertainty
+  plotUncert(chron = ageits_i, datV = dat_i, xmin = min(ageits_i), xmax = max(ageits_i), res = uncertainty_res, spline=FALSE)
+  lines(time_i, dat_i, col = rgb(0,0,0, alpha=0.5), lwd=1.5)
+  points(time_i, dat_i, pch=".", cex=3.5, col="black")
+  # Text
+  mtext(name, side=3, adj=0, cex=1.3, line=0.2)
+  mtext("Age (cal. yr BP)", side=1, cex=1.3, line=3)
+  box(lwd=2)
+  # Reverse y axis if chosen
+  if(rev_y){
+    ylim<-rev(range(dat_i))
+  }
+}
+
 #' Plot uncertainties
 #'
 #' @description

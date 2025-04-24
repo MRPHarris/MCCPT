@@ -11,14 +11,19 @@ conduct_MCCPT(
   output_folder = paste0(getwd(), "/CPT_outputs/"),
   minseg_len = NULL,
   n_cpts = NULL,
+  cpt_calc = "meanvar",
+  cpt_method = "BinSeg",
+  penalty_value = "2*log(n)",
+  penalty_type = "Manual",
   save = TRUE,
   rtn = TRUE,
   rev_y = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  uncertainty_res = 20
 )
 }
 \arguments{
-\item{sites_data}{formatted paleoclimate data, output from import_sites.}
+\item{sites_data}{formatted paleoclimate data, output from import_files.}
 
 \item{age_lowerbound}{minimum age for the analysis in years BP.}
 
@@ -30,11 +35,21 @@ conduct_MCCPT(
 
 \item{n_cpts}{number of changepoints to attempt. User will be prompted on a per-record basis if none is specified.}
 
+\item{cpt_calc}{which type of changepoint calculation? One of "meanvar" or "mean".}
+
+\item{cpt_method}{passed to method in cpt.mean or cpt.meanvar. See \link[changepoint]{cpt.mean}}
+
+\item{penalty_value}{value used for pen.value in cpt.mean or cpt.meanvar.}
+
+\item{penalty_type}{character; value passed to penalty in cpt.mean or cpt.meanvar.}
+
 \item{save}{TRUE/FALSE to save outputs to the output_folder.}
 
 \item{rtn}{TRUE/FALSE to return changepoint data.}
 
 \item{rev_y}{TRUE/FALSE to reverse y axis on plots}
+
+\item{uncertainty_res}{Resolution in years for uncertainty resolution within the PrC calculation. Adjust this for shorter series.}
 }
 \description{
 Apply MCCPT to paleoclimate data

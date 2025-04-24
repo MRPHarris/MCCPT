@@ -1,16 +1,19 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # MCCPT
 
-<!-- badges: start -->
-<!-- badges: end -->
-
-The **MCCPT** package conducts Monte-carlo changepoint analysis on
-paleoclimate records. It is an implementation of Rebecca Killick’s
-[changepoint method](https://github.com/rkillick/changepoint/), but
-applied to paleoclimate records whilst accounting for age-model
-uncertainty.
+The **MCCPT** package performs changepoint analysis on time series data
+with attached age model ensembles, thereby accounting for age
+uncertainty in the location of changepoints. It is an implementation of
+Rebecca Killick’s [changepoint
+method](https://github.com/rkillick/changepoint/), but applied over age
+model ensemble members so as to generate a probabilistic estimate of
+changepoint locations. It was originally envisioned for any
+depth-resolved paleoclimate record with an attached multi-ensemble age
+model (e.g., lake sediments, ice cores, etc.). A typical input would be
+interpolated Bayesian age-depth model outputs from the [Oxcal
+radiocarbon calibration software](https://c14.arch.ox.ac.uk/oxcal.html)
+or
+[rbacon](https://cran.r-project.org/web/packages/rbacon/vignettes/rbacon.html).
 
 If you have questions or comments, you can contact the package
 maintainers:
@@ -59,7 +62,8 @@ separate sheets):
 2.  ‘Data’, containing a formatted data frame of the data you are
     interested in. This must have at least two columns:
 
-- Depth_cm
+- Depth (exact column name may vary but it must contain the
+  case-sensitive string ‘Depth’)
 - Any number of other columns containing proxy data (pollen species,
   d18O, etc.). This will be compressed into a principal curve.
 
@@ -73,7 +77,10 @@ al. (2024)](https://onlinelibrary.wiley.com/doi/10.1002/jqs.3681?af=R).
 ### Running MCCPT
 
 Once you have installed the package and formatted your data
-appropriately, run `conduct_MCCPT()`. This will generate:
+appropriately, store the files in a folder and pass the folder path to
+`import_files()`. Next, run `conduct_MCCPT()` on the resulting data
+structure (a formatted list) after adjusting the parameters of the
+function accordingly (min age, max age, etc.). This will generate:
 
 - an R list of per-record changepoints, depending on your choices made
   whilst the program is running.
@@ -92,15 +99,14 @@ al. (2021)](https://doi.org/10.1017/qua.2021.16).
 </p>
 
 If you use the **MCCPT** package, please cite this paper. As **MCCPT**
-relies heavily on the `changepoint` package, you should also cite
-[Killick & Eckley.
-(2021)](https://www.jstatsoft.org/article/view/v058i03).
+relies on the `changepoint` package, you should also cite [Killick &
+Eckley. (2021)](https://www.jstatsoft.org/article/view/v058i03).
 
 An example citation might read something like: *… to identify shifts in
 our records, we conducted a changepoint analysis (Killick & Eckley,
 2014). We used the MCCPT R package, which applies a monte-carlo approach
 to account for age uncertainty in the position of changepoints within
-paleoclimate records (Cadd et al., 2021).*
+paleo records (Cadd et al., 2021).*
 
 ## References
 
