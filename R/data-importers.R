@@ -42,22 +42,29 @@ import_files <- function(target_folder, pattern_filter = NULL) {
     # Normalize site_name to match file_base style
     norm_site_name <- gsub(" ", "_", trimws(site_name))
 
-    # Escape regex special characters (as before)
-    escape_regex <- function(x) {
-      gsub("([][{}()+*^$|\\\\.?])", "\\\\\\1", x)
+    # Function to normalize names for matching: replace underscores/spaces with nothing, lowercase
+    normalize_name <- function(x) {
+      tolower(gsub("[ _]", "", x))
     }
-    norm_site_name_esc <- escape_regex(norm_site_name)
 
-    # Now remove norm_site_name + optional underscore from start of file_base
-    suffix <- gsub(paste0("^", norm_site_name_esc, "_?"), "", trimws(file_base), ignore.case = TRUE)
+    norm_site_name_norm <- normalize_name(norm_site_name)
+    file_base_norm <- normalize_name(file_base)
 
-
-    # Construct unique name for the list entry
-    if (suffix != "") {
-      list_name <- paste0(site_name, "_", suffix)
+    # If file_base starts with norm_site_name → extract the suffix
+    if (startsWith(file_base_norm, norm_site_name_norm)) {
+      raw_suffix <- substr(file_base, nchar(norm_site_name) + 1, nchar(file_base))
+      raw_suffix <- sub("^[_ ]*", "", raw_suffix)  # Remove leading _ or space from suffix
     } else {
-      list_name <- site_name
+      raw_suffix <- file_base  # fallback, shouldn't happen often
     }
+
+    # Final list_name
+    if (nzchar(raw_suffix)) {
+      list_name <- paste0(norm_site_name, "_", raw_suffix)
+    } else {
+      list_name <- norm_site_name
+    }
+
 
     flist[[f]] <- site_data
     names[f] <- list_name
