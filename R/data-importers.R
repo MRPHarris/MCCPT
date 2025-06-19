@@ -11,69 +11,24 @@
 #'
 #' @export
 #'
-#'
-#'
-import_files <- function(target_folder, pattern_filter = NULL) {
-  # List all .xlsx files
-  files <- list.files(target_folder, pattern = "\\.xlsx$", full.names = TRUE)
-
-  # If pattern_filter is given, keep only files that match any pattern in it
-  if (!is.null(pattern_filter)) {
-    # pattern_filter is expected to be a character vector of regex or fixed strings
-    keep <- sapply(pattern_filter, function(pat) grepl(pat, basename(files), ignore.case = TRUE))
-    keep <- apply(keep, 1, any)  # keep files matching ANY pattern
-    files <- files[keep]
-  }
-
+import_files <- function(target_folder){
+  ## test vars
+  # target_folder <- paste0(proj_dir,"/data-raw/Stradbroke-comp-raw/")
+  # list files containing '.xlsx'
+  files <- list.files(target_folder, full.names = T)[grep(".xlsx",list.files(target_folder, full.names = F))]
+  # make list of same length as files name quantity
   flist <- vector('list', length(files))
-  names <- vector('character', length = length(files))
-
-  for (f in seq_along(files)) {
-    file_path <- files[f]
-    file_name <- basename(file_path)
-    file_base <- gsub("\\.xlsx$", "", file_name)  # Remove extension
-
-    # Import data
-    site_data <- import_site_xlsx(file_path)
-
-    # Extract site name from metadata
-    site_name <- site_data$metadata[2, 2]
-
-    # Normalize site_name to match file_base style
-    norm_site_name <- gsub(" ", "_", trimws(site_name))
-
-    # Function to normalize names for matching: replace underscores/spaces with nothing, lowercase
-    normalize_name <- function(x) {
-      tolower(gsub("[ _]", "", x))
-    }
-
-    norm_site_name_norm <- normalize_name(norm_site_name)
-    file_base_norm <- normalize_name(file_base)
-
-    # If file_base starts with norm_site_name → extract the suffix
-    if (startsWith(file_base_norm, norm_site_name_norm)) {
-      raw_suffix <- substr(file_base, nchar(norm_site_name) + 1, nchar(file_base))
-      raw_suffix <- sub("^[_ ]*", "", raw_suffix)  # Remove leading _ or space from suffix
-    } else {
-      raw_suffix <- file_base  # fallback, shouldn't happen often
-    }
-
-    # Final list_name
-    if (nzchar(raw_suffix)) {
-      list_name <- paste0(norm_site_name, "_", raw_suffix)
-    } else {
-      list_name <- norm_site_name
-    }
-
-
-    flist[[f]] <- site_data
-    names[f] <- list_name
+  names <- vector('character',length = length(files))
+  # Import, add to list, and get names of each site.
+  for(f in seq_along(flist)){
+    flist[[f]] <- import_site_xlsx(files[f])
+    names[f] <- flist[[f]]$metadata[2,2]
   }
-
-  names(flist) <- names
+  # assign names
+  flist <- flist %>% 'names<-'(names %>% unlist())
+  # return
   return(flist)
 }
-
 
 #' Import a of single site xlsx file for changepoint analysis
 #'
