@@ -1,4 +1,4 @@
-# Functions for data import
+# Functions for data importMore actions
 
 #' Get all sites in the target folder
 #'
@@ -6,12 +6,14 @@
 #' Scrape the supplied directory for sites for CPT analysis, and load them into a formatted list.
 #'
 #' @param folder_path a full path to the directory containing site xlsx files
+#' @param verbose TRUE/FALSE to print per-file update progress
 #'
 #' @importFrom magrittr %>%
 #'
 #' @export
 #'
-import_files <- function(target_folder){
+import_files <- function(target_folder,
+                         verbose = TRUE){
   ## test vars
   # target_folder <- paste0(proj_dir,"/data-raw/Stradbroke-comp-raw/")
   # list files containing '.xlsx'
@@ -23,6 +25,7 @@ import_files <- function(target_folder){
   for(f in seq_along(flist)){
     flist[[f]] <- import_site_xlsx(files[f])
     names[f] <- flist[[f]]$metadata[2,2]
+    if(verbose){message("Imported file ",f,"/",length(flist))}
   }
   # assign names
   flist <- flist %>% 'names<-'(names %>% unlist())
@@ -59,3 +62,4 @@ import_site_xlsx <- function(file_path){
   # return
   return(data_list)
 }
+  
