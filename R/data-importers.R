@@ -17,7 +17,7 @@ import_files <- function(target_folder,
   ## test vars
   # target_folder <- paste0(proj_dir,"/data-raw/Stradbroke-comp-raw/")
   # list files containing '.xlsx'
-  files <- list.files(target_folder, full.names = T)[grep(".xlsx",list.files(target_folder, full.names = F))]
+    files <- list.files(target_folder, pattern = "\\.xlsx$", full.names = TRUE, ignore.case = TRUE)
   # make list of same length as files name quantity
   flist <- vector('list', length(files))
   names <- vector('character',length = length(files))
